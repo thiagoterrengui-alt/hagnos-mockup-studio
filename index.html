@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hagnos MockupStudio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Figtree:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f2f7;--sur:#ffffff;--sur2:#f2f2f7;--bor:rgba(0,0,0,.08);--bor2:rgba(0,0,0,.14);--gold:#b07d3a;--gold2:#c8943e;--tx:#1c1c1e;--tx2:#48484a;--tx3:#8e8e93;--grn:#34c759;--R:8px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:'Figtree',sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+.hdr{height:48px;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--bor);display:flex;align-items:center;padding:0 1.4rem;flex-shrink:0}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--tx)}.logo span{color:var(--gold)}
+.htag{margin-left:auto;font-family:'DM Mono',monospace;font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);border:1px solid var(--bor2);padding:.18rem .5rem;border-radius:2px}
+.body{display:flex;flex:1;overflow:hidden}
+.sb{width:340px;flex-shrink:0;background:#ffffff;border-right:1px solid var(--bor);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bor2) transparent}
+.sb::-webkit-scrollbar{width:3px}.sb::-webkit-scrollbar-thumb{background:var(--bor2)}
+.ss{padding:.8rem 1rem;border-bottom:1px solid var(--bor)}
+.sl{font-family:'DM Mono',monospace;font-size:.57rem;letter-spacing:.14em;text-transform:uppercase;color:var(--tx3);margin-bottom:.55rem;display:flex;align-items:center;gap:.4rem}
+.sl::after{content:'';flex:1;height:1px;background:var(--bor)}
+.utabs{display:grid;grid-template-columns:1fr 1fr;gap:.25rem;margin-bottom:.55rem}
+.utab{padding:.34rem;font-size:.69rem;text-align:center;border:1px solid var(--bor2);border-radius:3px;cursor:pointer;color:var(--tx2);transition:all .15s;background:transparent;font-family:'Figtree',sans-serif}
+.utab.on{background:var(--gold);color:#000;border-color:var(--gold);font-weight:600}
+.dz{border:1.5px dashed var(--bor2);border-radius:var(--R);padding:.9rem .75rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;background:#fafafa}
+.dz:hover,.dz.ov{border-color:var(--gold);background:rgba(200,164,90,.05)}
+.dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.dz .di{font-size:1.3rem;margin-bottom:.25rem;opacity:.65}
+.dz .dt{font-size:.74rem;color:var(--tx2);line-height:1.35}
+.dz .dt strong{color:var(--tx);display:block}
+.dz .dh{font-size:.62rem;color:var(--tx3);margin-top:.18rem;font-family:'DM Mono',monospace}
+.tup{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.28rem}
+.mz{border:1.5px dashed var(--bor2);border-radius:4px;padding:.45rem .15rem;text-align:center;cursor:pointer;position:relative;transition:all .15s;background:#fafafa}
+.mz:hover{border-color:var(--gold)}.mz.ok{border-color:var(--grn);background:rgba(74,124,89,.1)}
+.mz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.mz .mi{font-size:.9rem;display:block;margin-bottom:.12rem}
+.mz .ml{font-size:.55rem;color:var(--tx3);font-family:'DM Mono',monospace}.mz.ok .ml{color:#6ec48a}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.25rem}
+.tb{padding:.38rem .28rem;border:1px solid var(--bor2);background:transparent;border-radius:3px;cursor:pointer;font-size:.7rem;font-family:'Figtree',sans-serif;color:var(--tx2);transition:all .15s;text-align:center}
+.tb:hover{border-color:var(--gold);color:var(--tx)}.tb.on{background:var(--gold);border-color:var(--gold);color:#000;font-weight:600}
+.fl{font-size:.6rem;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.22rem}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;margin-top:.38rem}
+.fc{display:flex;flex-direction:column}
+input[type=number],input[type=text],select{width:100%;padding:.38rem .5rem;background:#f9f9fb;border:1px solid var(--bor2);border-radius:6px;color:var(--tx);font-family:'DM Mono',monospace;font-size:.76rem;transition:border-color .15s}
+input:focus,select:focus{outline:none;border-color:var(--gold)}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235a5448'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .5rem center;cursor:pointer}
+.scalc{background:#f0f0f5;border:1px solid var(--bor);border-radius:3px;padding:.38rem .55rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold);text-align:center;margin-top:.3rem}
+.crow{display:flex;align-items:center;gap:.38rem;margin-top:.28rem}
+.cpv{width:26px;height:26px;border-radius:3px;border:1px solid var(--bor2);cursor:pointer;flex-shrink:0;position:relative}
+.cpv input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;padding:0;border:none}
+.cw2{flex:1;position:relative}
+.cw2 input{padding-right:1.7rem}
+.cb{position:absolute;right:.32rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.78rem;padding:0;opacity:.6;transition:opacity .15s}
+.cb:hover{opacity:1}
+.pres{display:flex;gap:.22rem;flex-wrap:wrap;margin-top:.38rem}
+.psw{width:16px;height:16px;border-radius:2px;cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:transform .12s;flex-shrink:0}
+.psw:hover{transform:scale(1.3)}
+.ag{display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem}
+.ac{border:1px solid var(--bor2);border-radius:4px;padding:.45rem .15rem;text-align:center;cursor:pointer;transition:all .15s;background:#fafafa}
+.ac:hover{border-color:var(--gold)}.ac.on{border-color:var(--gold);background:rgba(200,164,90,.08)}
+.ac .ai{font-size:1rem;display:block;margin-bottom:.14rem}
+.ac .an{font-size:.57rem;font-family:'DM Mono',monospace;color:var(--tx2);line-height:1.2}
+.ac.on .an{color:var(--gold)}
+#spvCanvas{background:#111;image-rendering:pixelated}
+.bgen{width:100%;padding:.78rem;background:var(--gold);color:#fff;border:none;border-radius:var(--R);font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:all .2s}
+.bgen:hover{background:var(--gold2);transform:translateY(-1px)}
+.scn-n.on{background:var(--gold);color:#000;border-color:var(--gold)}
+.scn-card{background:var(--sur);border:1px solid var(--bor);border-radius:var(--R);overflow:hidden}
+.scn-card img{width:100%;display:block}
+.scn-card-footer{padding:.48rem .72rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--bor)}
+.scn-label{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em}
+.scn-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:1rem;color:var(--tx3);font-family:'DM Mono',monospace;font-size:.72rem}
+.scn-spinner{width:36px;height:36px;border:3px solid var(--bor2);border-top-color:#4285f4;border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.tbar{height:40px;background:var(--sur);border-bottom:1px solid var(--bor);display:flex;align-items:center;padding:0 1.1rem;gap:.55rem;flex-shrink:0}
+.ti{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)}
+.tsep{flex:1}
+.bs{padding:.26rem .68rem;font-size:.7rem;border:1px solid var(--bor2);background:transparent;border-radius:3px;cursor:pointer;color:var(--tx2);font-family:'Figtree',sans-serif;transition:all .15s}
+.bs:hover{border-color:var(--gold);color:var(--tx)}.bs.pr{background:var(--gold);color:#000;border-color:var(--gold);font-weight:600}.bs.pr:hover{background:var(--gold2)}
+.ca{flex:1;overflow-y:auto;padding:1.2rem;scrollbar-width:thin;scrollbar-color:var(--bor2) transparent}
+.ca::-webkit-scrollbar{width:4px}.ca::-webkit-scrollbar-thumb{background:var(--bor2)}
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:.95rem}
+.mc{background:var(--sur);border:1px solid var(--bor);border-radius:var(--R);overflow:hidden}
+.mcw{display:flex;align-items:center;justify-content:center;background:#ffffff;min-height:260px;padding:.5rem}
+.mcw canvas{width:100% !important;height:auto !important;display:block;max-height:340px;object-fit:contain}
+.mcf{padding:.48rem .72rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--bor)}
+.mcn{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tx2)}
+.bdl{padding:.24rem .5rem;font-size:.62rem;border:1px solid var(--bor2);background:transparent;border-radius:2px;cursor:pointer;color:var(--tx2);font-family:'DM Mono',monospace;transition:all .15s}
+.bdl:hover{border-color:var(--gold);color:var(--gold)}
+.emp{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.85rem;color:var(--tx3)}
+.emp-i{font-size:2.8rem;opacity:.2}
+.emp-t{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--tx2);font-weight:300}
+.emp-s{font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.07em;text-align:center;line-height:1.9}
+.lbar{position:fixed;top:48px;left:286px;right:0;height:2px;z-index:100}
+.lp{height:100%;background:var(--gold);width:0;transition:width .3s}
+.tst{position:fixed;bottom:1.2rem;right:1.2rem;background:var(--sur2);border:1px solid var(--bor2);border-left:3px solid var(--gold);padding:.58rem .9rem;border-radius:4px;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--tx);transform:translateY(50px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:999}
+.tst.on{transform:translateY(0);opacity:1}
+.cm{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;display:none;align-items:center;justify-content:center}
+.cm.op{display:flex}
+.cmi{background:var(--sur2);border:1px solid var(--bor2);border-radius:8px;padding:1.2rem;width:295px;max-height:80vh;overflow-y:auto}
+.cmt{font-family:'Cormorant Garamond',serif;font-size:.98rem;margin-bottom:.8rem}
+.cpb{width:100%;height:38px;border-radius:4px;margin-bottom:.7rem;border:1px solid var(--bor2)}
+.rr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.35rem;margin-bottom:.6rem}
+.rf{display:flex;flex-direction:column;gap:.15rem}
+.rf label{font-size:.56rem;color:var(--tx3);font-family:'DM Mono',monospace;text-transform:uppercase}
+.ptg{display:grid;grid-template-columns:repeat(6,1fr);gap:.3rem;margin-bottom:.8rem}
+.ptc{aspect-ratio:1;border-radius:3px;cursor:pointer;border:1px solid rgba(255,255,255,.1);position:relative;transition:transform .12s}
+.ptc:hover{transform:scale(1.15);z-index:1}
+.ptc::after{content:attr(data-n);position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);background:#000;color:#fff;font-size:.5rem;padding:.1rem .28rem;border-radius:2px;white-space:nowrap;opacity:0;pointer-events:none;font-family:'DM Mono',monospace}
+.ptc:hover::after{opacity:1}
+.mb{display:flex;gap:.35rem}
+.mbc{flex:1;padding:.5rem;background:var(--gold);color:#000;border:none;border-radius:3px;cursor:pointer;font-weight:600;font-family:'Figtree',sans-serif;font-size:.8rem}
+.mbx{padding:.5rem .8rem;background:transparent;color:var(--tx2);border:1px solid var(--bor2);border-radius:3px;cursor:pointer;font-family:'Figtree',sans-serif;font-size:.8rem}
+</style>
+</head>
+<body>
+<div class="lbar"><div class="lp" id="lp"></div></div>
+<header class="hdr">
+  <div class="logo">Hagnos <span>MockupStudio</span></div>
+  <div class="htag">v6 · Three.js 3D</div>
+</header>
+<div class="body">
+<aside class="sb">
+  <div class="ss">
+    <div class="sl">Upload da Capa</div>
+    <div class="utabs">
+      <button class="utab on" onclick="setMode('spread')">Spread Completo</button>
+      <button class="utab" onclick="setMode('parts')">3 Partes</button>
+    </div>
+    <div id="upSpread">
+      <div class="dz" id="dzSpread">
+        <input type="file" accept=".jpg,.jpeg,.png,.pdf" onchange="loadSpread(this)">
+        <div class="di">📄</div>
+        <div class="dt"><strong>Spread completo</strong>Verso + Lombada + Frente</div>
+        <div class="dh" id="spreadFN">Arraste ou clique · JPG/PNG/PDF</div>
+      </div>
+    </div>
+    <div id="upParts" style="display:none">
+      <div class="tup">
+        <div class="mz" id="mzV"><input type="file" accept=".jpg,.jpeg,.png" onchange="loadPart(this,'verso')"><span class="mi">📖</span><div class="ml">VERSO</div></div>
+        <div class="mz" id="mzL"><input type="file" accept=".jpg,.jpeg,.png" onchange="loadPart(this,'lombada')"><span class="mi">📏</span><div class="ml">LOMBADA</div></div>
+        <div class="mz" id="mzF"><input type="file" accept=".jpg,.jpeg,.png" onchange="loadPart(this,'frente')"><span class="mi">📗</span><div class="ml">FRENTE</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SPREAD PREVIEW / AJUSTE ── -->
+  <div class="ss" id="spread-adj" style="display:none">
+    <div class="sl">Ajustar Spread</div>
+    <div style="font-size:.60rem;color:var(--tx3);margin-bottom:.4rem">
+      Arraste as linhas para ajustar os cortes
+    </div>
+    <div style="position:relative;width:100%">
+      <canvas id="spvCanvas" style="width:100%;border-radius:4px;cursor:col-resize;display:block"></canvas>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:.3rem;font-size:.58rem;font-family:'DM Mono',monospace;color:var(--tx3)">
+      <span>← Verso</span><span>Lombada</span><span>Frente →</span>
+    </div>
+    <div style="display:flex;gap:.28rem;margin-top:.4rem">
+      <button class="tb" style="flex:1;font-size:.62rem" onclick="resetSpreadAdj()">↺ Resetar linhas</button>
+    </div>
+  </div>
+
+  <div class="ss">
+    <div class="sl">Formato</div>
+    <div class="g2">
+      <button class="tb on" data-g="sz" data-v="1623" onclick="so(this)">16 × 23 cm</button>
+      <button class="tb" data-g="sz" data-v="1421" onclick="so(this)">14 × 21 cm</button>
+      <button class="tb" data-g="sz" data-v="1318" onclick="so(this)">13 × 18 cm</button>
+      <button class="tb" data-g="sz" data-v="2121" onclick="so(this)">21 × 21 cm</button>
+      <button class="tb" data-g="sz" data-v="2128" onclick="so(this)">21 × 28 cm</button>
+      <button class="tb" data-g="sz" data-v="1015" onclick="so(this)">10 × 15 cm</button>
+    </div>
+  </div>
+  <div class="ss">
+    <div class="sl">Encadernação</div>
+    <div class="g2">
+      <button class="tb on" data-g="cv" data-v="bro" onclick="so(this);autoC()">📗 Brochura</button>
+      <button class="tb" data-g="cv" data-v="hrd" onclick="so(this);autoC()">📘 Capa Dura</button>
+    </div>
+  </div>
+  <div class="ss">
+    <div class="sl">Lateral das Páginas</div>
+    <div class="g2">
+      <button class="tb on" data-g="sp" data-v="paint" onclick="so(this)">Com pintura</button>
+      <button class="tb" data-g="sp" data-v="none" onclick="so(this)">Sem pintura</button>
+    </div>
+  </div>
+  <div class="ss" id="scs">
+    <div class="sl">Cor da Lateral</div>
+    <div class="crow">
+      <div class="cpv" id="cpv" style="background:#1a5038">
+        <input type="color" id="cpn" value="#1a5038" oninput="applyC(this.value)">
+      </div>
+      <div class="cw2">
+        <input type="text" id="cph" value="#1a5038" onchange="applyC(this.value)">
+        <button class="cb" onclick="openCM()">🎨</button>
+      </div>
+    </div>
+    <div class="pres" id="pres"></div>
+  </div>
+  <div class="ss">
+    <div class="sl">Espessura da Lombada</div>
+    <div class="fr2">
+      <div class="fc"><div class="fl">Nº Páginas</div><input type="number" id="pgs" placeholder="ex: 280" min="1" oninput="calcSp()"></div>
+      <div class="fc"><div class="fl">Papel</div>
+        <select id="pap" onchange="calcSp()">
+          <option value="0.08">Offset 75g</option>
+          <option value="0.10">Offset 90g</option>
+          <option value="0.06">Pólen 80g</option>
+          <option value="0.12">Couchê 90g</option>
+        </select>
+      </div>
+    </div>
+    <div class="scalc" id="scd">— configure acima</div>
+    <div class="fc" style="margin-top:.35rem"><div class="fl">Manual (mm)</div><input type="number" id="spM" placeholder="ex: 18" min="1" oninput="calcSp()"></div>
+  </div>
+  <div class="ss">
+    <div class="sl">Fundo</div>
+    <div class="g2">
+      <button class="tb on" data-g="bg" data-v="wht" onclick="so(this)">⬜ Branco</button>
+      <button class="tb" data-g="bg" data-v="drk" onclick="so(this)">⬛ Escuro</button>
+    </div>
+  </div>
+  <div class="ss">
+    <div class="sl">Iluminação</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem">
+
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:.2rem">
+          <span style="font-size:.62rem;color:var(--tx3)">Intensidade geral</span>
+          <span style="font-size:.62rem;color:var(--gold);font-family:'DM Mono',monospace" id="lbl-ambient"></span>
+        </div>
+        <input type="range" id="sl-ambient" min="0" max="100" value="28"
+          oninput="updLight()" style="width:100%">
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:.2rem">
+          <span style="font-size:.62rem;color:var(--tx3)">Luz principal</span>
+          <span style="font-size:.62rem;color:var(--gold);font-family:'DM Mono',monospace" id="lbl-main"></span>
+        </div>
+        <input type="range" id="sl-main" min="0" max="150" value="62"
+          oninput="updLight()" style="width:100%">
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:.2rem">
+          <span style="font-size:.62rem;color:var(--tx3)">Luz de preenchimento</span>
+          <span style="font-size:.62rem;color:var(--gold);font-family:'DM Mono',monospace" id="lbl-fill"></span>
+        </div>
+        <input type="range" id="sl-fill" min="0" max="80" value="12"
+          oninput="updLight()" style="width:100%">
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.28rem;margin-top:.2rem">
+        <button class="tb" onclick="setLightPreset('suave')">☁ Suave</button>
+        <button class="tb" onclick="setLightPreset('neutro')">⚖ Neutro</button>
+        <button class="tb" onclick="setLightPreset('dramatico')">🎭 Dramático</button>
+        <button class="tb" onclick="setLightPreset('estudio')">💡 Estúdio</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ss">
+    <div class="sl">Ângulos</div>
+    <div class="ag">
+      <div class="ac on" data-a="fl" onclick="togA(this)"><span class="ai">📗</span><div class="an">Frontal Esq</div></div>
+      <div class="ac on" data-a="fr" onclick="togA(this)"><span class="ai">📘</span><div class="an">Frontal Dir</div></div>
+      <div class="ac on" data-a="bl" onclick="togA(this)"><span class="ai">🔙</span><div class="an">Verso Esq</div></div>
+      <div class="ac" data-a="br" onclick="togA(this)"><span class="ai">🔚</span><div class="an">Verso Dir</div></div>
+      <div class="ac on" data-a="fc" onclick="togA(this)"><span class="ai">⬜</span><div class="an">Frente Chapada</div></div>
+      <div class="ac on" data-a="vc" onclick="togA(this)"><span class="ai">⬛</span><div class="an">Verso Chapado</div></div>
+      <div class="ac on" data-a="tv" onclick="togA(this)"><span class="ai">🔝</span><div class="an">Diagonal Alta</div></div>
+      <div class="ac on" data-a="fy" onclick="togA(this)"><span class="ai">📐</span><div class="an">Flutuante</div></div>
+      <div class="ac on" data-a="st" onclick="togA(this)"><span class="ai">🏛️</span><div class="an">Torre</div></div>
+      <div class="ac on" data-a="fb" onclick="togA(this)"><span class="ai">↔️</span><div class="an">Frente+Verso</div></div>
+      <div class="ac" data-a="ly" onclick="togA(this)"><span class="ai">📚</span><div class="an">Duo Flutuante</div></div>
+      <div class="ac" data-a="so" onclick="togA(this)"><span class="ai">🗂️</span><div class="an">Grade Diagonal</div></div>
+    </div>
+  </div>
+  <div class="ss">
+    <button class="bgen" onclick="genAll()">✦ Gerar Mockups</button>
+    <button onclick="confirmReset()" style="width:100%;margin-top:.5rem;padding:.5rem;background:none;border:1px solid var(--bor2);border-radius:var(--R);color:var(--tx3);font-size:.68rem;cursor:pointer;font-family:'DM Mono',monospace;transition:all .2s" onmouseover="this.style.borderColor='#ff4444';this.style.color='#ff4444'" onmouseout="this.style.borderColor='var(--bor2)';this.style.color='var(--tx3)'">↺ Nova capa</button>
+  </div></aside>
+
+<!-- Modal confirmação reset -->
+<div id="resetModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);z-index:999;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:16px;padding:1.8rem 2rem;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);text-align:center">
+    <div style="font-size:2rem;margin-bottom:.6rem">🔄</div>
+    <div style="font-size:1rem;font-weight:700;color:#1c1c1e;margin-bottom:.4rem">Nova capa?</div>
+    <div style="font-size:.8rem;color:#8e8e93;margin-bottom:1.4rem;line-height:1.5">Todos os campos serão resetados e as imagens geradas serão apagadas.</div>
+    <div style="display:flex;gap:.6rem">
+      <button onclick="closeReset()" style="flex:1;padding:.7rem;border-radius:10px;border:1px solid #e0e0e5;background:#f5f5f7;color:#1c1c1e;font-size:.82rem;cursor:pointer;font-family:'Figtree',sans-serif">Cancelar</button>
+      <button onclick="doReset()" style="flex:1;padding:.7rem;border-radius:10px;border:none;background:#ff3b30;color:#fff;font-size:.82rem;font-weight:600;cursor:pointer;font-family:'Figtree',sans-serif">Resetar</button>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="tbar">
+    <span class="ti" id="tinfo">0 mockups</span>
+    <div class="tsep"></div>
+    <div id="exp-opts" style="display:none;align-items:center;gap:.4rem">
+      <select id="expFmt" title="Formato" style="font-size:.68rem;padding:.2rem .4rem;background:var(--sur);border:1px solid var(--bor2);color:var(--tx1);border-radius:3px;cursor:pointer">
+        <option value="jpg-tray">JPG — Tray (~350KB)</option>
+        <option value="jpg-high">JPG — Alta qualidade</option>
+        <option value="png">PNG — Máxima qualidade</option>
+      </select>
+      <button class="bs" id="bdla" onclick="dlAll()">⬇ Baixar Todos</button>
+    </div>
+    <button class="bs pr" onclick="genAll()">✦ Gerar</button>
+  </div>
+  <div class="ca">
+    <div class="emp" id="emp">
+      <div class="emp-i">📚</div>
+      <div class="emp-t">Pronto para criar</div>
+      <div class="emp-s">Faça upload do spread completo<br>e clique em <strong style="color:var(--gold)">✦ Gerar Mockups</strong></div>
+    </div>
+    <div class="mg" id="mg" style="display:none"></div>
+  </div>
+</main>
+</div>
+<div class="cm" id="cmodal">
+  <div class="cmi">
+    <div class="cmt">Cor da Lateral</div>
+    <div class="cpb" id="cpb"></div>
+    <div class="rr">
+      <div class="rf"><label>R</label><input type="number" id="rI" min="0" max="255" oninput="rgb2h()"></div>
+      <div class="rf"><label>G</label><input type="number" id="gI" min="0" max="255" oninput="rgb2h()"></div>
+      <div class="rf"><label>B</label><input type="number" id="bI" min="0" max="255" oninput="rgb2h()"></div>
+    </div>
+    <div class="fc" style="margin-bottom:.6rem"><div class="fl">HEX</div><input type="text" id="hmi" oninput="h2rgb(this.value)"></div>
+    <div class="fl" style="margin-bottom:.35rem">Pantone</div>
+    <div class="ptg" id="ptg"></div>
+    <div class="mb"><button class="mbx" onclick="closeCM()">Cancelar</button><button class="mbc" onclick="confC()">Aplicar</button></div>
+  </div>
+</div>
+<div class="tst" id="tst"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+</script>
+<script>
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+const S = {
+  mode:'spread',
+  imgs:{spread:null,frente:null,lombada:null,verso:null},
+  sz:'1623', cv:'bro', sp:'paint',
+  spineColor:'#1a5038', spineMM:18, bg:'wht',
+  angles:new Set(['fl','fr','bl','tv','fy','st','fb','fc','vc']),
+  light:{ ambient:0.28, main:0.62, fill:0.12 },
+  gen:[]
+};
+
+// ═══════════════════════════════════════════════════
+// THREE.JS GLOBAL SETUP — offscreen renderer
+// ═══════════════════════════════════════════════════
+const REND = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true, alpha:false});
+REND.setSize(1500, 1500);
+REND.setPixelRatio(1);
+REND.shadowMap.enabled = false; // NO shadows
+const REND_SCN = new THREE.Scene();
+const CAM = new THREE.PerspectiveCamera(32, 1, 0.1, 500); // square aspect
+
+// ═══════════════════════════════════════════════════
+// DIMENSIONS  (scale: 1 unit = 10mm)
+// ═══════════════════════════════════════════════════
+function bDims(){
+  const fmts = {
+    '1623': {w:160, h:230},
+    '1421': {w:140, h:210},
+    '1318': {w:130, h:180},
+    '2121': {w:210, h:210},
+    '2128': {w:210, h:280},
+    '1015': {w:100, h:150},
+  };
+  const mm = fmts[S.sz] || fmts['1623'];
+  const D = Math.max(0.4, S.spineMM/10);
+  const overhang = S.cv==='hrd' ? 0.3 : 0; // 3mm capa dura overhang
+  return {W:mm.w/10, H:mm.h/10, D, OV:overhang};
+}
+
+// ═══════════════════════════════════════════════════
+// TEXTURE BUILDERS
+// ═══════════════════════════════════════════════════
+function srcToTex(src){
+  if(!src) return null;
+  const t = new THREE.CanvasTexture(src);
+  t.needsUpdate = true;
+  return t;
+}
+
+// Page cut edge (fore-edge — the open side of the book)
+// This is what Thiago calls "pintura lateral"
+// Shows painted color or white pages with fine horizontal lines
+// ─── EDGE TEXTURE HELPERS ──────────────────────────
+// Draw realistic paper grain: fine horizontal lines with slight waviness,
+// random opacity variation, and occasional slightly darker "vein" lines.
+// Used for fore-edge (side) and top/bottom cuts.
+// axis: 'H' = lines run horizontally (fore-edge), 'V' = lines run vertically (top)
+function drawPageGrain(ctx, W, H, axis, baseColor){
+  ctx.fillStyle = baseColor;
+  ctx.fillRect(0, 0, W, H);
+
+  const lineCount = axis==='H' ? H/1.1 : W/1.1;
+  const lineLen   = axis==='H' ? W : H;
+
+  // Seed for deterministic "random" using simple LCG
+  let seed = 42;
+  const rnd = () => { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; };
+
+  for(let i = 0; i < lineCount; i++){
+    const pos = i * 1.1;
+    // Every ~30-50 lines, draw a slightly more visible "vein"
+    const isVein = (i % Math.floor(28 + rnd()*18)) < 1.2;
+    const alpha = isVein ? (0.10 + rnd()*0.10) : (0.03 + rnd()*0.04);
+
+    ctx.strokeStyle = `rgba(0,0,0,${alpha.toFixed(3)})`;
+    ctx.lineWidth   = isVein ? 0.8 : 0.4;
+
+    ctx.beginPath();
+    if(axis==='H'){
+      // Slight waviness: nudge Y by tiny amount
+      const wave = (rnd()-0.5)*0.6;
+      ctx.moveTo(0,      pos + wave);
+      ctx.lineTo(lineLen, pos + (rnd()-0.5)*0.6);
+    } else {
+      const wave = (rnd()-0.5)*0.6;
+      ctx.moveTo(pos + wave, 0);
+      ctx.lineTo(pos + (rnd()-0.5)*0.6, lineLen);
+    }
+    ctx.stroke();
+  }
+}
+
+// Fore-edge (lateral das páginas — lado direito do livro)
+function mkForeedgeTex(){
+  const c = document.createElement('canvas');
+  c.width = 512; c.height = 2048; // alta resolução para linhas finas nítidas
+  const ctx = c.getContext('2d');
+  const W = 512, H = 2048;
+
+  if(S.sp==='paint'){
+    // Cor exata + linhas finas de páginas verticais
+    ctx.fillStyle = S.spineColor;
+    ctx.fillRect(0,0,W,H);
+    drawPageLines(ctx, W, H);
+  } else {
+    // Páginas brancas/creme com linhas finas e degradê de profundidade
+    ctx.fillStyle = '#f0ece0';
+    ctx.fillRect(0,0,W,H);
+    drawPageLines(ctx, W, H);
+    // Degradê lateral: escurece nas bordas (esq=lombada, dir=fore-edge aberto)
+    const eg = ctx.createLinearGradient(0,0,W,0);
+    eg.addColorStop(0,    'rgba(0,0,0,0.22)');
+    eg.addColorStop(0.08, 'rgba(0,0,0,0.04)');
+    eg.addColorStop(0.92, 'rgba(0,0,0,0.02)');
+    eg.addColorStop(1,    'rgba(0,0,0,0.18)');
+    ctx.fillStyle = eg; ctx.fillRect(0,0,W,H);
+  }
+  return new THREE.CanvasTexture(c);
+}
+
+// Simula páginas finas como no RapidMockup:
+// linhas verticais finas, espaçamento uniforme ~1.2px, variação sutil de tom
+function drawPageLines(ctx, W, H){
+  let seed = 17;
+  const rnd = () => { seed=(seed*1664525+1013904223)&0xffffffff; return (seed>>>0)/0xffffffff; };
+
+  const spacing = 1.4; // px entre linhas — quanto menor, mais páginas
+  const count = Math.floor(W / spacing);
+
+  for(let i = 0; i < count; i++){
+    const x = i * spacing;
+    // Alterna entre linha de página (clara) e separação (escura)
+    const isEdge = (i % 2 === 0);
+    const alpha = isEdge
+      ? (0.12 + rnd() * 0.08)  // linha de borda da página
+      : (0.03 + rnd() * 0.03); // miolo da página (quase invisível)
+    ctx.strokeStyle = isEdge ? `rgba(0,0,0,${alpha.toFixed(3)})` : `rgba(255,255,255,${(0.08+rnd()*0.06).toFixed(3)})`;
+    ctx.lineWidth = 0.6;
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, H);
+    ctx.stroke();
+  }
+}
+
+// Top/bottom edge (topo e base do livro)
+function mkTopEdgeTex(){
+  const c = document.createElement('canvas');
+  c.width = 1024; c.height = 256;
+  const ctx = c.getContext('2d');
+
+  if(S.cv==='hrd'){
+    // Hardcover board: no page grain, solid board color with gradient
+    const g = ctx.createLinearGradient(0,0,0,256);
+    g.addColorStop(0,'#ccc4a4'); g.addColorStop(0.5,'#b8b090'); g.addColorStop(1,'#a8a080');
+    ctx.fillStyle = g; ctx.fillRect(0,0,1024,256);
+    // Subtle cloth texture
+    ctx.strokeStyle='rgba(0,0,0,0.04)'; ctx.lineWidth=0.5;
+    for(let x=0;x<1024;x+=2.5){
+      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,256);ctx.stroke();
+    }
+  } else if(S.sp==='paint'){
+    ctx.fillStyle = S.spineColor;
+    ctx.fillRect(0,0,1024,256);
+    drawPageGrain(ctx, 1024, 256, 'V', 'transparent');
+  } else {
+    // Plain pages top: grain running vertically (left-right = width of book)
+    drawPageGrain(ctx, 1024, 256, 'V', '#e0dccb');
+    const eg = ctx.createLinearGradient(0,0,0,256);
+    eg.addColorStop(0,'rgba(0,0,0,0.2)');
+    eg.addColorStop(0.15,'rgba(0,0,0,0.04)');
+    eg.addColorStop(0.85,'rgba(0,0,0,0.03)');
+    eg.addColorStop(1,'rgba(0,0,0,0.18)');
+    ctx.fillStyle=eg; ctx.fillRect(0,0,1024,256);
+  }
+  return new THREE.CanvasTexture(c);
+}
+
+// Spine fallback (when no lombada image provided)
+function mkSpineTex(){
+  const c = document.createElement('canvas');
+  c.width = 128; c.height = 1024;
+  const ctx = c.getContext('2d');
+  const col = hexToRgb(S.spineColor);
+  const g = ctx.createLinearGradient(0,0,128,0);
+  g.addColorStop(0,   `rgb(${Math.max(0,col.r-18)},${Math.max(0,col.g-18)},${Math.max(0,col.b-18)})`);
+  g.addColorStop(0.35,`rgb(${Math.min(255,col.r+10)},${Math.min(255,col.g+10)},${Math.min(255,col.b+10)})`);
+  g.addColorStop(1,   `rgb(${Math.max(0,col.r-12)},${Math.max(0,col.g-12)},${Math.max(0,col.b-12)})`);
+  ctx.fillStyle = g; ctx.fillRect(0,0,128,1024);
+  return new THREE.CanvasTexture(c);
+}
+
+
+// Page-only edge: always renders pages or paint (never board cloth)
+// Used for the page block top/bottom in hardcover books
+function mkPageOnlyEdgeTex(){
+  const c = document.createElement('canvas');
+  c.width = 1024; c.height = 256;
+  const ctx = c.getContext('2d');
+  if(S.sp==='paint'){
+    ctx.fillStyle = S.spineColor;
+    ctx.fillRect(0,0,1024,256);
+    drawPageGrain(ctx, 1024, 256, 'V', 'transparent');
+  } else {
+    drawPageGrain(ctx, 1024, 256, 'V', '#e0dccb');
+    const eg = ctx.createLinearGradient(0,0,0,256);
+    eg.addColorStop(0,'rgba(0,0,0,0.20)');
+    eg.addColorStop(0.15,'rgba(0,0,0,0.04)');
+    eg.addColorStop(0.85,'rgba(0,0,0,0.03)');
+    eg.addColorStop(1,'rgba(0,0,0,0.18)');
+    ctx.fillStyle=eg; ctx.fillRect(0,0,1024,256);
+  }
+  return new THREE.CanvasTexture(c);
+}
+
+
+//
+// The book is modelled as a THREE.Group containing:
+//   1. Page block  — the actual pages (miolo)
+//   2. Front board — front cover (capa dura: slightly larger)
+//   3. Back board  — back cover
+//   4. Spine wrap  — thin strip connecting front+back boards
+//
+// For brochura: it's a single box (cover == page block)
+//
+// AXIS CONVENTION (book standing upright):
+//   X = width of cover (left-right)
+//   Y = height of book (up-down)
+//   Z = depth / thickness
+//
+// In this orientation:
+//   +Z face = front cover (facing viewer)
+//   -Z face = back cover
+//   -X face = SPINE (left side of book)
+//   +X face = FORE-EDGE / lateral das páginas (right side)
+//   +Y face = top edge
+//   -Y face = bottom edge
+//
+// The book group is then rotated in each renderer.
+// rotation.y > 0 tilts right → -X (spine) becomes visible on left
+// rotation.y < 0 tilts left  → +X (fore-edge) visible, or show spine on right
+// ═══════════════════════════════════════════════════
+function buildBookGroup(parts){
+  const {W,H,D,OV} = bDims();
+  const group = new THREE.Group();
+
+  const isHard = S.cv==='hrd';
+
+  // Materials
+  const frontTex = parts.frente ? srcToTex(parts.frente) : null;
+  const backTex  = parts.verso  ? srcToTex(parts.verso)  : null;
+  const spineTex = parts.lombada? srcToTex(parts.lombada) : null;
+
+  const frontMat = new THREE.MeshStandardMaterial({
+    map: frontTex || null, color: frontTex ? 0xffffff : 0x2a3040,
+    roughness:0.72, metalness:0
+  });
+  const backMat = new THREE.MeshStandardMaterial({
+    map: backTex || null, color: backTex ? 0xffffff : 0x223030,
+    roughness:0.72, metalness:0
+  });
+  const spineMat = new THREE.MeshStandardMaterial({
+    map: spineTex || mkSpineTex(), color: 0xffffff,
+    roughness:0.75, metalness:0
+  });
+  // Pintura lateral: MeshBasicMaterial ignora luz 100% — cor exata sempre
+  const mkPaintMat = (tex) => S.sp==='paint'
+    ? new THREE.MeshBasicMaterial({ map: tex, color: 0xffffff })
+    : new THREE.MeshStandardMaterial({ map: tex, color: 0xffffff, roughness: 0.88, metalness: 0 });
+
+  const foreedgeMat = mkPaintMat(mkForeedgeTex());
+  const topEdgeMat  = mkPaintMat(mkTopEdgeTex());
+  // pageEdgeMat: for page block top/bottom in hardcover
+  const pageEdgeMat = isHard ? mkPaintMat(mkPageOnlyEdgeTex()) : topEdgeMat;
+
+  if(!isHard){
+    // ── BROCHURA: single box ──
+    // BoxGeometry face order: [+X, -X, +Y, -Y, +Z, -Z]
+    // +X = fore-edge (right, lateral das páginas)
+    // -X = spine (left)
+    // +Y = top
+    // -Y = bottom
+    // +Z = front cover
+    // -Z = back cover
+    const geo = new THREE.BoxGeometry(W, H, D);
+    const mesh = new THREE.Mesh(geo, [
+      foreedgeMat,  // +X fore-edge
+      spineMat,     // -X spine
+      topEdgeMat,   // +Y top
+      topEdgeMat,   // -Y bottom
+      frontMat,     // +Z front cover
+      backMat       // -Z back cover
+    ]);
+    group.add(mesh);
+
+  } else {
+    // ── CAPA DURA: page block + boards + spine ──
+    // OV = overhang (cover extends beyond pages on 3 sides)
+    // Spine side (-X) has NO overhang (cover is flush with spine)
+
+    const boardThick = 0.08; // 0.8mm board thickness
+    const pageW = W;         // page block same width
+    const pageH = H;
+    const pageD = D - boardThick*2; // pages thinner than cover
+
+    // Cover dimensions (slightly larger than pages)
+    const cvW = W + OV;       // cover wider (fore-edge side only)
+    const cvH = H + OV*2;     // cover taller top+bottom
+    const cvD = boardThick;
+
+    // Page block (the actual miolo)
+    // Faces: +X=fore-edge, -X=(inner,hidden), +Y=top, -Y=bottom, +Z=front, -Z=back
+    const pageGeo = new THREE.BoxGeometry(pageW, pageH, pageD);
+    const pageMesh = new THREE.Mesh(pageGeo, [
+      foreedgeMat,  // +X fore-edge (visible right side)
+      new THREE.MeshStandardMaterial({color:0x888070,roughness:0.9}), // -X (hidden, under spine)
+      pageEdgeMat,  // +Y top — pages/paint (NOT board color)
+      pageEdgeMat,  // -Y bottom — pages/paint
+      new THREE.MeshStandardMaterial({color:0xcccccc}), // +Z (hidden under front board)
+      new THREE.MeshStandardMaterial({color:0xcccccc})  // -Z (hidden under back board)
+    ]);
+    // Page block centered, shifted slightly toward +X so spine side (-X) is flush
+    pageMesh.position.set(OV/2, 0, 0);
+    group.add(pageMesh);
+
+    // Front board (+Z side, covering pages in +Z direction)
+    const frontBoardGeo = new THREE.BoxGeometry(cvW, cvH, cvD);
+    const frontBoard = new THREE.Mesh(frontBoardGeo, [
+      new THREE.MeshStandardMaterial({color:0xb8af90,roughness:0.8}), // +X (right edge of board)
+      new THREE.MeshStandardMaterial({color:0xa8a080,roughness:0.8}), // -X (left edge of board, at spine)
+      new THREE.MeshStandardMaterial({color:0xb8af90,roughness:0.8}), // +Y
+      new THREE.MeshStandardMaterial({color:0xb8af90,roughness:0.8}), // -Y
+      frontMat,   // +Z (visible front face)
+      new THREE.MeshStandardMaterial({color:0xd0c8a8,roughness:0.85}) // -Z (inner face)
+    ]);
+    frontBoard.position.set(OV/2, 0, pageD/2 + cvD/2);
+    group.add(frontBoard);
+
+    // Back board (-Z side)
+    const backBoardGeo = new THREE.BoxGeometry(cvW, cvH, cvD);
+    const backBoard = new THREE.Mesh(backBoardGeo, [
+      new THREE.MeshStandardMaterial({color:0xb8af90,roughness:0.8}),
+      new THREE.MeshStandardMaterial({color:0xa8a080,roughness:0.8}),
+      new THREE.MeshStandardMaterial({color:0xb8af90,roughness:0.8}),
+      new THREE.MeshStandardMaterial({color:0xb8af90,roughness:0.8}),
+      new THREE.MeshStandardMaterial({color:0xd0c8a8,roughness:0.85}), // +Z inner
+      backMat  // -Z visible back face
+    ]);
+    backBoard.position.set(OV/2, 0, -(pageD/2 + cvD/2));
+    group.add(backBoard);
+
+    // Spine wrap (covers the -X side, connects front+back boards)
+    const spineGeo = new THREE.BoxGeometry(cvD*1.5, cvH, D);
+    const spineMesh = new THREE.Mesh(spineGeo, [
+      new THREE.MeshStandardMaterial({color:0xa8a080,roughness:0.85}), // +X
+      spineMat,    // -X (the visible spine face)
+      topEdgeMat,  // +Y
+      topEdgeMat,  // -Y
+      new THREE.MeshStandardMaterial({color:0xc8c0a0}), // +Z
+      new THREE.MeshStandardMaterial({color:0xc8c0a0})  // -Z
+    ]);
+    spineMesh.position.set(-(pageW/2 + cvD*0.75), 0, 0);
+    group.add(spineMesh);
+  }
+
+  return group;
+}
+
+// ═══════════════════════════════════════════════════
+// SCENE SETUP — no shadows, clean lighting
+// ═══════════════════════════════════════════════════
+function setupScene(mirrorX){
+  while(REND_SCN.children.length > 0) REND_SCN.remove(REND_SCN.children[0]);
+  REND.setClearColor(S.bg==='wht' ? 0xffffff : 0x0f0d0a, 1);
+
+  // Iluminação controlada pelos sliders do painel
+  REND_SCN.add(new THREE.AmbientLight(0xffffff, S.light.ambient));
+
+  const mx = mirrorX ? -1 : 1;
+  const main = new THREE.DirectionalLight(0xfff8f0, S.light.main);
+  main.position.set(5 * mx, 8, 10);
+  REND_SCN.add(main);
+
+  const fill = new THREE.DirectionalLight(0xffffff, S.light.fill);
+  fill.position.set(-6 * mx, 3, 5);
+  REND_SCN.add(fill);
+
+  const rim = new THREE.DirectionalLight(0xffffff, 0.04);
+  rim.position.set(0, -3, -8);
+  REND_SCN.add(rim);
+}
+
+// ═══════════════════════════════════════════════════
+// SNAP — render to canvas
+// ═══════════════════════════════════════════════════
+function snap(){
+  REND.render(REND_SCN, CAM);
+  const out = document.createElement('canvas');
+  out.width = 1500; out.height = 1500;
+  out.getContext('2d').drawImage(REND.domElement, 0, 0);
+  return out;
+}
+
+// ═══════════════════════════════════════════════════
+// IMAGE EXTRACTION
+// Spread layout: [VERSO | LOMBADA | FRENTE]
+// ═══════════════════════════════════════════════════
+function getBookMM(){
+  const fmts = {
+    '1623': {w:160, h:230},
+    '1421': {w:140, h:210},
+    '1318': {w:130, h:180},
+    '2121': {w:210, h:210},
+    '2128': {w:210, h:280},
+    '1015': {w:100, h:150},
+  };
+  return fmts[S.sz] || fmts['1623'];
+}
+
+function cropCanvas(src,sx,sy,sw,sh){
+  const c = document.createElement('canvas');
+  c.width=Math.max(1,sw); c.height=Math.max(1,sh);
+  c.getContext('2d').drawImage(src,sx,sy,sw,sh,0,0,sw,sh);
+  return c;
+}
+
+function c2c(img){ // image to canvas
+  const c=document.createElement('canvas');
+  c.width=img.width;c.height=img.height;
+  c.getContext('2d').drawImage(img,0,0);
+  return c;
+}
+
+function getParts(){
+  if(S.mode==='parts'){
+    return {
+      frente:  S.imgs.frente  ? c2c(S.imgs.frente)  : null,
+      lombada: S.imgs.lombada ? c2c(S.imgs.lombada) : null,
+      verso:   S.imgs.verso   ? c2c(S.imgs.verso)   : null
+    };
+  }
+  if(!S.imgs.spread) return {frente:null,lombada:null,verso:null};
+  const img=S.imgs.spread;
+  const W=img.width, H=img.height;
+  const bm=getBookMM();
+  const spMM=Math.max(2, S.spineMM);
+  const total=bm.w*2+spMM; // largura total em mm
+
+  // Calcula altura esperada em pixels baseada na proporção do formato
+  // Se o spread tiver proporção diferente, faz crop central vertical
+  const expectedH = Math.round(W * (bm.h / total));
+  const useH = Math.min(H, expectedH);
+  const sy = Math.max(0, Math.round((H - useH) / 2)); // centraliza verticalmente
+
+  let versoW, spW;
+  if(S._divL && S._divR){
+    // Usa divisões definidas manualmente no adjuster
+    versoW = Math.round(W * S._divL);
+    spW    = Math.max(1, Math.round(W * (S._divR - S._divL)));
+  } else {
+    versoW = Math.round(W*(bm.w/total));
+    spW    = Math.max(1, Math.round(W*(spMM/total)));
+  }
+  const fX = versoW+spW;
+  return {
+    verso:   cropCanvas(img, 0,      sy, versoW, useH),
+    lombada: cropCanvas(img, versoW, sy, spW,    useH),
+    frente:  cropCanvas(img, fX,     sy, W-fX,   useH)
+  };
+}
+
+function hasImgs(){ return S.mode==='spread'?!!S.imgs.spread:!!(S.imgs.frente||S.imgs.lombada||S.imgs.verso); }
+
+// ═══════════════════════════════════════════════════
+// 9 RENDERERS
+//
+// ROTATION GUIDE (book upright, Z-axis = spine depth):
+//
+// "Frontal Direita" (reference image sent by Thiago):
+//   → spine visible on LEFT of viewer
+//   → fore-edge visible on RIGHT of viewer  ← this is "pintura lateral"
+//   → rotation.y = +0.52 (tilts right side away, left side toward viewer)
+//   Wait — actually looking at the reference:
+//     The SPINE is on the RIGHT of the image (thin dark green strip)
+//     The FORE-EDGE (painted pages) is on the LEFT edge of the cover
+//   So for "Frontal Direita":
+//     → book rotated so +X (fore-edge) faces slightly left
+//     → -X (spine) is visible on the right
+//     → rotation.y = -0.52
+//
+// "Frontal Esquerda":
+//     → spine on LEFT (-X visible)
+//     → rotation.y = +0.52
+// ═══════════════════════════════════════════════════
+
+// ─── CAMERA AUTO-FIT ───────────────────────────────
+// Square canvas (1500×1500), tight framing — book fills ~90% of frame
+function fitCamera(target, marginFactor=0.88){
+  const box = new THREE.Box3().setFromObject(target);
+  const center = new THREE.Vector3();
+  box.getCenter(center);
+  const sphere = new THREE.Sphere();
+  box.getBoundingSphere(sphere);
+
+  const fovRad = CAM.fov * Math.PI / 180;
+  const dist = (sphere.radius / Math.sin(fovRad / 2)) * marginFactor;
+
+  const dir = CAM.position.clone().sub(center).normalize();
+  CAM.position.copy(center).addScaledVector(dir, dist);
+  CAM.lookAt(center);
+}
+
+// ─── ANGLE CONSTANTS ───────────────────────────────
+const ANG = 0.70;         // 40° tilt — spine well visible
+const CAM_Y_OFFSET = 0.4; // slight elevation
+
+// 1. Frontal Esquerda — spine on LEFT
+function rFL(){
+  setupScene();
+  const P=getParts(); const{W}=bDims();
+  const book=buildBookGroup(P);
+  book.rotation.y = ANG;
+  REND_SCN.add(book);
+  CAM.position.set(-W*0.05, CAM_Y_OFFSET, 100);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(book, 0.88);
+  return snap();
+}
+
+// 2. Frontal Direita — spine on RIGHT, luz espelhada para iluminar a capa igualmente
+function rFR(){
+  setupScene(true); // mirrorX=true: luz vem da esquerda → capa bem iluminada
+  const P=getParts(); const{W}=bDims();
+  const book=buildBookGroup(P);
+  book.rotation.y = -ANG;
+  REND_SCN.add(book);
+  CAM.position.set(W*0.05, CAM_Y_OFFSET, 100);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(book, 0.88);
+  return snap();
+}
+
+// 3. Verso Esquerda — back cover, spine LEFT
+function rBL(){
+  setupScene(true); // verso: luz da esquerda ilumina o verso
+  const P=getParts(); const{W}=bDims();
+  const book=buildBookGroup(P);
+  book.rotation.y = Math.PI - ANG;
+  REND_SCN.add(book);
+  CAM.position.set(-W*0.05, CAM_Y_OFFSET, 100);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(book, 0.88);
+  return snap();
+}
+
+// 3b. Verso Direita — back cover, spine RIGHT
+function rBR(){
+  setupScene(); // verso direita: luz normal
+  const P=getParts(); const{W}=bDims();
+  const book=buildBookGroup(P);
+  book.rotation.y = -(Math.PI - ANG);
+  REND_SCN.add(book);
+  CAM.position.set(W*0.05, CAM_Y_OFFSET, 100);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(book, 0.88);
+  return snap();
+}
+
+// 4. Vista Diagonal Alta — câmera acima-esquerda, livro levemente rotacionado
+// Estilo Pacdora: livro "flutuando", topo + lateral direita com pintura visíveis
+function rTV(){
+  setupScene();
+  const P=getParts(); const{W,H,D}=bDims();
+  const book=buildBookGroup(P);
+  // Leve rotação Y (~16°): mostra quase toda a frente + fore-edge direito
+  book.rotation.y = 0.28;
+  // Leve inclinação X: base do livro levemente visível
+  book.rotation.x = -0.08;
+  REND_SCN.add(book);
+  // Câmera elevada ~33°, ligeiramente à esquerda
+  const elevAngle = 0.58;
+  CAM.position.set(
+    -W * 0.3,
+    100 * Math.sin(elevAngle),
+    100 * Math.cos(elevAngle)
+  );
+  CAM.lookAt(0, H*0.05, 0);
+  fitCamera(book, 0.88);
+  return snap();
+}
+
+// 5. Flutuante — livro DEITADO na mesa, câmera elevada em diagonal
+// Referência: livro plano, câmera ~45° acima, frente visível + topo + lombada esquerda
+// Livro levemente rotacionado em diagonal para composição mais dinâmica
+function rFY(){
+  setupScene();
+  const P=getParts(); const{W,H,D}=bDims();
+
+  const book = buildBookGroup(P);
+  book.rotation.order = 'YXZ';
+  book.rotation.x = -Math.PI/2; // deita o livro — capa fica para cima
+  book.rotation.z = -0.38;       // ~22° diagonal, lombada à esquerda
+
+  REND_SCN.add(book);
+
+  // Câmera elevada, olhando para baixo em diagonal
+  // Alta em Y, recuada em Z, levemente à direita em X
+  CAM.position.set(W * 0.6, H * 1.4, H * 1.2);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(book, 0.88);
+  return snap();
+}
+
+// 6. Torre — 2 livros deitados com lombada visível + 1 em pé no topo
+// Referência: livros deitados rotacionados igual aos em pé (ANG) — lombada à esquerda
+// Pintura lateral: visível no topo, base e lateral direita dos livros deitados
+function rST(){
+  setupScene();
+  const P=getParts(); const{W,H,D}=bDims();
+  const grp = new THREE.Group();
+
+  const gap = 0.1; // gap entre livros deitados
+
+  // LIVROS DEITADOS: estratégia —
+  // 1. rotation.y = ANG  → mostra lombada à esquerda (igual ao frontal esquerda)
+  // 2. rotation.x = PI/2 → deita o livro (cover vira para baixo, topo vira para frente)
+  // Resultado: lombada visível à esquerda, topo pintado visível na frente do livro deitado
+
+  // Livro deitado BAIXO
+  const bookFlat1 = buildBookGroup(P);
+  bookFlat1.rotation.order = 'YXZ';
+  bookFlat1.rotation.y = ANG;
+  bookFlat1.rotation.x = Math.PI/2;
+  // Centro Y: o livro deitado tem altura=D, largura=W, profundidade=H
+  // base da cena = -H/2 (altura total do livro em pé / 2)
+  bookFlat1.position.set(0, -H/2 + D/2, 0);
+  grp.add(bookFlat1);
+
+  // Livro deitado CIMA — em cima do primeiro
+  const bookFlat2 = buildBookGroup(P);
+  bookFlat2.rotation.order = 'YXZ';
+  bookFlat2.rotation.y = ANG;
+  bookFlat2.rotation.x = Math.PI/2;
+  bookFlat2.position.set(0, -H/2 + D/2 + D + gap, 0);
+  grp.add(bookFlat2);
+
+  // Livro em PÉ no topo — frontal esquerda (lombada visível)
+  const bookUp = buildBookGroup(P);
+  bookUp.rotation.y = ANG;
+  const pileTop = -H/2 + D*2 + gap;   // topo da pilha de deitados
+  bookUp.position.set(0, pileTop + H/2, 0);
+  grp.add(bookUp);
+
+  REND_SCN.add(grp);
+  CAM.position.set(-W*0.05, H*0.1, 100);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(grp, 0.88);
+  return snap();
+}
+
+// 7. Frente + Verso
+function rFB(){
+  setupScene();
+  const P=getParts(); const{W}=bDims();
+  const grp = new THREE.Group();
+  const bkF=buildBookGroup(P);
+  bkF.rotation.y = ANG;
+  bkF.position.x = -(W*0.7);
+  grp.add(bkF);
+  const bkB=buildBookGroup(P);
+  bkB.rotation.y = -(Math.PI - ANG);
+  bkB.position.x = (W*0.7);
+  grp.add(bkB);
+  REND_SCN.add(grp);
+  CAM.position.set(0, CAM_Y_OFFSET, 100);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(grp, 0.88);
+  const out=snap();
+  const ctx=out.getContext('2d');
+  ctx.font='500 13px Figtree,sans-serif'; ctx.textAlign='center';
+  ctx.fillStyle=S.bg==='wht'?'rgba(0,0,0,0.3)':'rgba(200,164,90,0.65)';
+  ctx.fillText('FRENTE', out.width*0.29, out.height-22);
+  ctx.fillText('VERSO',  out.width*0.71, out.height-22);
+  return out;
+}
+
+// 8. Duo Flutuante — dois livros em ângulos diferentes, estilo Pacdora
+// Livro esquerdo: atrás, inclinado para trás e para a esquerda
+// Livro direito: na frente, mais vertical, levemente rotacionado
+function rLY(){
+  setupScene();
+  const P=getParts(); const{W,H,D}=bDims();
+  const grp = new THREE.Group();
+
+  // Livro ESQUERDO — rotacionado ~55° mostrando lateral direita + frente em ângulo
+  // Tombado para esquerda, posição baixa-esquerda
+  const bookL = buildBookGroup(P);
+  bookL.rotation.order = 'YXZ';
+  bookL.rotation.y = -0.95;   // ~55° — lateral direita bem visível, frente em ângulo
+  bookL.rotation.x = -0.08;   // leve inclinação para trás
+  bookL.rotation.z = -0.22;   // tombamento para esquerda
+  bookL.position.set(-W*0.55, -H*0.10, -D*1.0);
+  grp.add(bookL);
+
+  // Livro DIREITO — quase chapado mostrando frente, levíssimo tombamento direita
+  // Posição alta-direita, ligeiramente à frente
+  const bookR = buildBookGroup(P);
+  bookR.rotation.order = 'YXZ';
+  bookR.rotation.y =  0.12;   // ~7° — quase frontal, fio da lateral esquerda
+  bookR.rotation.x = -0.06;   // mínima inclinação
+  bookR.rotation.z =  0.08;   // tombamento suave para direita
+  bookR.position.set( W*0.42, H*0.08, D*1.0);
+  grp.add(bookR);
+
+  REND_SCN.add(grp);
+
+  CAM.position.set(0, H*0.20, 100);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(grp, 0.88);
+  return snap();
+}
+
+// 9. Grade Diagonal — livros em pé em grid 4×3, câmera isométrica lateral
+// Referência: câmera na altura do meio do livro, ângulo ~35° lateral
+// Livros retos, a perspectiva da câmera revela topo e lateral
+function rSO(){
+  setupScene();
+  const P=getParts(); const{W,H,D}=bDims();
+  const grp = new THREE.Group();
+
+  const cols = 4;
+  const rows = 3;
+  const gapX = W * 0.12;
+  const gapZ = D * 3.5; // profundidade entre fileiras
+
+  const totalW = cols * W + (cols-1) * gapX;
+  const totalD = rows * D + (rows-1) * gapZ;
+
+  for(let row = 0; row < rows; row++){
+    for(let col = 0; col < cols; col++){
+      const book = buildBookGroup(P);
+      book.rotation.y = 0;
+
+      const px = (col * (W + gapX)) - totalW/2 + W/2;
+      const pz = (row * (D + gapZ)) - totalD/2 + D/2;
+
+      book.position.set(px, 0, pz);
+      grp.add(book);
+    }
+  }
+
+  REND_SCN.add(grp);
+
+  // Câmera: altura = H/2 (nível do meio do livro) + elevação leve
+  // Muito recuada em Z + deslocada em X para criar perspectiva diagonal
+  // Isso mantém os livros VERTICAIS na imagem (não deitados)
+  CAM.position.set(-totalW * 0.7, H * 0.6, totalD * 1.8);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(grp, 0.88);
+  return snap();
+}
+
+// ── FRENTE CHAPADA — capa frontal perfeitamente reta, sem ângulo, sem distorção
+function rFC(){
+  setupScene();
+  const P=getParts();
+  const book=buildBookGroup(P);
+  book.rotation.y = 0;
+  REND_SCN.add(book);
+  // Câmera perfeitamente centrada, FOV estreito para minimizar distorção perspectiva
+  CAM.fov = 18; CAM.updateProjectionMatrix();
+  CAM.position.set(0, 0, 200);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(book, 0.88);
+  const out = snap();
+  CAM.fov = 32; CAM.updateProjectionMatrix(); // restaura FOV padrão
+  return out;
+}
+
+// ── LOMBADA CHAPADA — lombada de frente, sem ângulo
+function rSP(){
+  setupScene();
+  const P=getParts();
+  const book=buildBookGroup(P);
+  book.rotation.y =  Math.PI/2; // gira 90° — lombada (-X) fica de frente
+  REND_SCN.add(book);
+  CAM.fov = 18; CAM.updateProjectionMatrix();
+  CAM.position.set(0, 0, 200);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(book, 0.88);
+  const out = snap();
+  CAM.fov = 32; CAM.updateProjectionMatrix();
+  return out;
+}
+
+// ── VERSO CHAPADO — quarta capa perfeitamente reta, sem ângulo
+function rVC(){
+  setupScene();
+  const P=getParts();
+  const book=buildBookGroup(P);
+  book.rotation.y = Math.PI; // vira 180° para mostrar o verso
+  REND_SCN.add(book);
+  CAM.fov = 18; CAM.updateProjectionMatrix();
+  CAM.position.set(0, 0, 200);
+  CAM.lookAt(0, 0, 0);
+  fitCamera(book, 0.88);
+  const out = snap();
+  CAM.fov = 32; CAM.updateProjectionMatrix();
+  return out;
+}
+
+
+async function genAll(){
+  if(!hasImgs()){toast('⚠️ Faça upload da capa primeiro!');return;}
+  if(S.angles.size===0){toast('⚠️ Selecione ao menos um ângulo');return;}
+  // Aplica crop+divisões do adjuster se estiver ativo
+  if(SPV.img && document.getElementById('spread-adj').style.display !== 'none'){
+    spvApplyToState();
+  }
+
+  document.getElementById('emp').style.display='none';
+  const mg=document.getElementById('mg');
+  mg.style.display='grid';mg.innerHTML='';
+  S.gen=[];
+  const lp=document.getElementById('lp');
+
+  const map={
+    fl:{fn:rFL,n:'Frontal Esquerda'},
+    fr:{fn:rFR,n:'Frontal Direita'},
+    bl:{fn:rBL,n:'Verso Esquerda'},
+    br:{fn:rBR,n:'Verso Direita'},
+    fc:{fn:rFC,n:'Frente Chapada'},
+    vc:{fn:rVC,n:'Verso Chapado'},
+    tv:{fn:rTV,n:'Diagonal Alta'},
+    fy:{fn:rFY,n:'Flutuante'},
+    st:{fn:rST,n:'Torre'},
+    fb:{fn:rFB,n:'Frente + Verso'},
+    ly:{fn:rLY,n:'Duo Flutuante'},
+    so:{fn:rSO,n:'Grade Diagonal'}
+  };
+  const al=Array.from(S.angles);
+
+  for(let i=0;i<al.length;i++){
+    lp.style.width=((i/al.length)*100)+'%';
+    await new Promise(r=>setTimeout(r,50)); // allow repaint
+    const cfg=map[al[i]]; if(!cfg) continue;
+
+    let canvas;
+    try { canvas = cfg.fn(); }
+    catch(e){ console.error(al[i], e); continue; }
+
+    S.gen.push({canvas, n:cfg.n, a:al[i]});
+
+    const card=document.createElement('div'); card.className='mc';
+    const wrap=document.createElement('div'); wrap.className='mcw'; wrap.appendChild(canvas);
+    const foot=document.createElement('div'); foot.className='mcf';
+    foot.innerHTML=`<span class="mcn">${cfg.n}</span><button class="bdl" onclick="dlOne('${al[i]}')">⬇ Salvar</button>`;
+    card.appendChild(wrap); card.appendChild(foot);
+    mg.appendChild(card);
+  }
+
+  lp.style.width='100%'; setTimeout(()=>lp.style.width='0',400);
+  document.getElementById('tinfo').textContent=S.gen.length+' mockup'+(S.gen.length!==1?'s':'');
+  document.getElementById('exp-opts').style.display='flex';
+  toast('✓ '+S.gen.length+' mockup(s) gerado(s)!');
+}
+
+function getExportBlob(canvas, fmt){
+  if(fmt === 'png') return { dataUrl: canvas.toDataURL('image/png'), ext: 'png' };
+  if(fmt === 'jpg-high') return { dataUrl: canvas.toDataURL('image/jpeg', 0.95), ext: 'jpg' };
+  // jpg-tray: comprime até ~350KB mantendo 1500x1500
+  // Tenta qualidades decrescentes até atingir o alvo
+  let q = 0.90;
+  let dataUrl;
+  while(q >= 0.30){
+    dataUrl = canvas.toDataURL('image/jpeg', q);
+    // base64 → bytes: length * 0.75 (aprox)
+    const bytes = (dataUrl.length - dataUrl.indexOf(',') - 1) * 0.75;
+    if(bytes <= 358400) break; // 350KB = 358400 bytes
+    q -= 0.05;
+  }
+  return { dataUrl, ext: 'jpg' };
+}
+
+function dlOne(a){
+  const m=S.gen.find(x=>x.a===a); if(!m) return;
+  const fmt = document.getElementById('expFmt')?.value || 'png';
+  const {dataUrl, ext} = getExportBlob(m.canvas, fmt);
+  const l=document.createElement('a');
+  l.href=dataUrl;
+  l.download=`mockup-${m.n.replace(/[ +]/g,'-')}.${ext}`;
+  document.body.appendChild(l); l.click(); document.body.removeChild(l);
+  toast('⬇ '+m.n);
+}
+async function dlAll(){
+  const fmt = document.getElementById('expFmt')?.value || 'png';
+  const label = {'jpg-tray':'JPG Tray','jpg-high':'JPG HD','png':'PNG'}[fmt] || 'PNG';
+  toast('⬇ Baixando '+S.gen.length+' em '+label+'...');
+  for(let i=0;i<S.gen.length;i++){
+    const m=S.gen[i];
+    const {dataUrl, ext} = getExportBlob(m.canvas, fmt);
+    const l=document.createElement('a');
+    l.href=dataUrl;
+    l.download=`mockup-${m.n.replace(/[ +]/g,'-')}.${ext}`;
+    document.body.appendChild(l); l.click(); document.body.removeChild(l);
+    await new Promise(r=>setTimeout(r,400));
+  }
+  toast('✓ Todos baixados em '+label+'!');
+}
+
+// ═══════════════════════════════════════════════════
+// UI HANDLERS
+// ═══════════════════════════════════════════════════
+function setMode(m){
+  S.mode=m;
+  document.getElementById('upSpread').style.display=m==='spread'?'block':'none';
+  document.getElementById('upParts').style.display=m==='parts'?'block':'none';
+  document.querySelectorAll('.utab').forEach((t,i)=>t.classList.toggle('on',(i===0&&m==='spread')||(i===1&&m==='parts')));
+}
+function loadImgFile(f,cb){const r=new FileReader();r.onload=e=>{const i=new Image();i.onload=()=>cb(i);i.src=e.target.result;};r.readAsDataURL(f);}
+
+// Detecta e remove sangria automaticamente comparando com o formato selecionado
+function cropBleed(imgEl){
+  const bm = getBookMM();
+  const spMM = Math.max(2, S.spineMM);
+  const spreadW = bm.w * 2 + spMM; // largura esperada do spread em mm
+  const spreadH = bm.h;             // altura esperada em mm
+
+  const iW = imgEl.naturalWidth || imgEl.width;
+  const iH = imgEl.naturalHeight || imgEl.height;
+
+  // Calcula a escala px/mm baseada na dimensão horizontal
+  const scalePx = iW / spreadW;
+
+  // Altura esperada em pixels
+  const expectedH = Math.round(spreadH * scalePx);
+
+  // Sangria detectada = diferença entre real e esperado ÷ 2
+  const bleedX = Math.max(0, Math.round((iW - spreadW * scalePx) / 2));
+  const bleedY = Math.max(0, Math.round((iH - expectedH) / 2));
+
+  if(bleedX === 0 && bleedY === 0) return imgEl; // sem sangria detectada
+
+  // Crop: remove sangria de todos os lados
+  const c = document.createElement('canvas');
+  c.width  = iW - bleedX * 2;
+  c.height = iH - bleedY * 2;
+  c.getContext('2d').drawImage(imgEl, bleedX, bleedY, c.width, c.height, 0, 0, c.width, c.height);
+
+  // Converte canvas de volta para Image
+  const out = new Image();
+  out.src = c.toDataURL('image/png');
+  const bleedMM = (bleedX / scalePx).toFixed(1);
+  toast(`✓ Sangria detectada e removida: ${bleedMM}mm`);
+  return out;
+}
+
+async function loadPDF(file, cb){
+  toast('⏳ Lendo PDF...');
+  try {
+    const ab = await file.arrayBuffer();
+    const loadTask = pdfjsLib.getDocument({ data: new Uint8Array(ab) });
+    const pdf = await loadTask.promise;
+    toast('⏳ PDF aberto — renderizando...');
+
+    const page = await pdf.getPage(1);
+    const scale = 2.5;
+    const vp = page.getViewport({ scale });
+
+    const c = document.createElement('canvas');
+    const ctx = c.getContext('2d');
+    c.width  = Math.floor(vp.width);
+    c.height = Math.floor(vp.height);
+
+    await page.render({ canvasContext: ctx, viewport: vp }).promise;
+
+    // Converte canvas → Image para compatibilidade com o resto do fluxo
+    const img = new Image();
+    img.onload = () => {
+      toast('✓ PDF carregado! (' + img.width + '×' + img.height + 'px)');
+      cb(img);
+    };
+    img.onerror = () => toast('⚠️ Erro ao converter PDF para imagem');
+    img.src = c.toDataURL('image/jpeg', 0.95);
+
+  } catch(e) {
+    console.error('[loadPDF]', e);
+    toast('⚠️ Erro: ' + (e.message || e));
+  }
+}
+
+function loadSpread(el){
+  const f = el.files[0]; if(!f) return;
+  const isPdf = f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf');
+  const fn = i => {
+    const finalize = img => {
+      S.imgs.spread = img;
+      document.getElementById('spreadFN').textContent = '✓ '+f.name;
+      document.getElementById('dzSpread').style.borderColor = 'var(--grn)';
+      toast('✓ Spread carregado! Ajuste os cortes abaixo.');
+      spvInit(img, isPdf);
+    };
+    const cropped = cropBleed(i);
+    if(!cropped.complete || cropped.naturalWidth === 0){
+      cropped.onload = () => finalize(cropped);
+    } else {
+      finalize(cropped);
+    }
+  };
+  if(isPdf){
+    loadPDF(f, fn);
+  } else {
+    loadImgFile(f, fn);
+  }
+}
+
+function loadPart(el,k){const f=el.files[0];if(!f)return;loadImgFile(f,i=>{S.imgs[k]=i;const ids={verso:'mzV',lombada:'mzL',frente:'mzF'};const d=document.getElementById(ids[k]);d.classList.add('ok');d.querySelector('.ml').textContent='✓ OK';toast('✓ '+k);});}
+function so(b){const g=b.dataset.g;document.querySelectorAll(`.tb[data-g="${g}"]`).forEach(x=>x.classList.remove('on'));b.classList.add('on');S[g]=b.dataset.v;}
+function autoC(){/* brochura=retos, dura=arredondados handled internally */}
+function togA(c){c.classList.toggle('on');const a=c.dataset.a;if(S.angles.has(a))S.angles.delete(a);else S.angles.add(a);}
+function calcSp(){
+  const m=parseFloat(document.getElementById('spM').value);
+  if(m>0){S.spineMM=m;document.getElementById('scd').textContent=m.toFixed(1)+' mm (manual)';return;}
+  const p=parseInt(document.getElementById('pgs').value)||0,t=parseFloat(document.getElementById('pap').value)||0.08;
+  if(p>0){const mm=(p/2)*t;S.spineMM=mm;document.getElementById('scd').textContent=mm.toFixed(1)+' mm ('+p+' págs.)';}
+  else document.getElementById('scd').textContent='— configure acima';
+}
+function applyC(h){if(!/^#[0-9a-fA-F]{6}$/.test(h))return;S.spineColor=h;document.getElementById('cpv').style.background=h;document.getElementById('cpn').value=h;document.getElementById('cph').value=h;}
+function openCM(){document.getElementById('cmodal').classList.add('op');h2rgb(S.spineColor);updCPB();}
+function closeCM(){document.getElementById('cmodal').classList.remove('op');}
+function updCPB(){document.getElementById('cpb').style.background=document.getElementById('hmi').value;}
+function h2rgb(h){const c=h.replace('#','');if(c.length!==6)return;document.getElementById('rI').value=parseInt(c.substr(0,2),16);document.getElementById('gI').value=parseInt(c.substr(2,2),16);document.getElementById('bI').value=parseInt(c.substr(4,2),16);document.getElementById('hmi').value=h.startsWith('#')?h:'#'+h;updCPB();}
+function rgb2h(){const r=Math.max(0,Math.min(255,+document.getElementById('rI').value||0)),g=Math.max(0,Math.min(255,+document.getElementById('gI').value||0)),b=Math.max(0,Math.min(255,+document.getElementById('bI').value||0));document.getElementById('hmi').value='#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');updCPB();}
+function confC(){applyC(document.getElementById('hmi').value);closeCM();toast('✓ Cor: '+S.spineColor);}
+
+// ═══════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════
+function hexToRgb(hex){const n=parseInt(hex.replace('#',''),16);return{r:(n>>16)&255,g:(n>>8)&255,b:n&255};}
+let tT;
+function toast(m){const t=document.getElementById('tst');t.textContent=m;t.classList.add('on');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('on'),3200);}
+
+// Pantone palette
+const PT=[
+  {n:'P.295',h:'#002d62'},{n:'P.286',h:'#0032a0'},{n:'P.300',h:'#0057a8'},{n:'P.3005',h:'#0076bd'},
+  {n:'P.328',h:'#007a6b'},{n:'P.3425',h:'#00633a'},{n:'P.349',h:'#1b5e2c'},{n:'P.364',h:'#4a7c2f'},
+  {n:'P.116',h:'#f5c800'},{n:'P.1505',h:'#e87722'},{n:'P.166',h:'#e35205'},{n:'P.1795',h:'#c8102e'},
+  {n:'P.200',h:'#ba0c2f'},{n:'P.208',h:'#89003d'},{n:'P.235',h:'#d2007a'},{n:'P.2685',h:'#570861'},
+  {n:'P.2745',h:'#2d1566'},{n:'P.Black',h:'#2b2926'},{n:'P.432',h:'#2e3a42'},{n:'P.430',h:'#7a8a8e'},
+  {n:'P.9160',h:'#d4cfc4'},{n:'P.9183',h:'#e8d5b0'},{n:'P.7508',h:'#c8a45a'},{n:'P.7516',h:'#7a4a2a'},
+  {n:'P.497',h:'#5a2d2d'},{n:'P.382',h:'#7ab800'},{n:'P.137',h:'#f5a623'},{n:'Branco',h:'#f0ede6'},
+  {n:'Creme',h:'#e8e0cc'},{n:'Preto',h:'#1a1a18'},{n:'P.7694',h:'#1a3a5c'},{n:'P.431',h:'#4a5760'},
+  {n:'P.2415',h:'#9b2a8a'},{n:'P.349',h:'#1a5038'},{n:'P.CG3',h:'#b5b5b5'},{n:'P.397',h:'#b5a300'},
+];
+const QK=['#1a5038','#1a2a4a','#3a1a1a','#2a1a3a','#c8a45a','#2b2926','#e8e2d6','#2e3a42','#d4510e','#002d62','#570861','#00633a'];
+
+function buildPal(){
+  QK.forEach(h=>{const s=document.createElement('div');s.className='psw';s.style.background=h;s.title=h;s.onclick=()=>applyC(h);document.getElementById('pres').appendChild(s);});
+  PT.forEach(p=>{const c=document.createElement('div');c.className='ptc';c.style.background=p.h;c.dataset.n=p.n;c.title=p.n+' '+p.h;c.onclick=()=>{h2rgb(p.h);updCPB();};document.getElementById('ptg').appendChild(c);});
+}
+
+// Drag & drop
+const dz=document.getElementById('dzSpread');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('ov');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('ov'));
+dz.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('ov');
+  const f=e.dataTransfer.files[0];if(!f)return;
+  const isPdf = f.type==='application/pdf'||f.name.toLowerCase().endsWith('.pdf');
+  const fn = i => {
+    const finalize = img => {
+      S.imgs.spread = img;
+      document.getElementById('spreadFN').textContent = '✓ '+f.name;
+      dz.style.borderColor = 'var(--grn)';
+      toast('✓ Spread carregado! Ajuste os cortes abaixo.');
+      spvInit(img, isPdf);
+    };
+    const cropped = cropBleed(i);
+    if(!cropped.complete || cropped.naturalWidth===0){ cropped.onload=()=>finalize(cropped); }
+    else { finalize(cropped); }
+  };
+  if(isPdf){ loadPDF(f,fn); } else { loadImgFile(f,fn); }
+});
+
+// ── SPREAD ADJUSTER ─────────────────────────────────
+// 4 alças de sangria (T/B/L/R) + 2 linhas de divisão (verso|lombada|frente)
+const SPV = {
+  img: null,
+  // Crop de sangria em px do canvas
+  cT:0, cB:0, cL:0, cR:0,
+  // Divisões internas em px (relativas ao canvas inteiro, não ao crop)
+  divL:0, divR:0,
+  drag: null, // 'cT'|'cB'|'cL'|'cR'|'dL'|'dR'
+  scale: 1,
+  timer: null
+};
+
+function spvInit(img, isPdf=false){
+  SPV.img = img;
+  const c = document.getElementById('spvCanvas');
+  const maxW = (c.parentElement.offsetWidth || 220);
+  const maxH = 340;
+  const scaleW = maxW / img.width;
+  const scaleH = maxH / img.height;
+  const scale  = Math.min(scaleW, scaleH);
+  c.width  = Math.round(img.width  * scale);
+  c.height = Math.round(img.height * scale);
+  SPV.scale = scale;
+
+  const bm = getBookMM();
+  const spMM = Math.max(2, S.spineMM);
+  const totalMM = bm.w * 2 + spMM;
+
+  let bleedX, bleedY;
+  if(isPdf){
+    // PDF tem sangria — abre 5% de cada lado para ajuste
+    bleedX = Math.round(c.width  * 0.05);
+    bleedY = Math.round(c.height * 0.05);
+  } else {
+    // Imagem sem sangria — linhas rentes às bordas
+    bleedX = 0;
+    bleedY = 0;
+  }
+
+  SPV.cL = bleedX; SPV.cR = c.width  - bleedX;
+  SPV.cT = bleedY; SPV.cB = c.height - bleedY;
+
+  // Divisões internas pelo formato
+  const innerW = SPV.cR - SPV.cL;
+  SPV.divL = SPV.cL + Math.round(innerW * (bm.w / totalMM));
+  SPV.divR = SPV.cL + Math.round(innerW * ((bm.w + spMM) / totalMM));
+
+  spvDraw();
+  document.getElementById('spread-adj').style.display = 'block';
+  spvAttachEvents(c);
+}
+
+function spvDraw(){
+  const c = document.getElementById('spvCanvas');
+  const ctx = c.getContext('2d');
+  const {cT,cB,cL,cR,divL,divR} = SPV;
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.drawImage(SPV.img, 0, 0, c.width, c.height);
+
+  // Overlay de sangria (4 bordas)
+  ctx.fillStyle = 'rgba(0,0,0,0.45)';
+  ctx.fillRect(0,   0,   c.width, cT);           // topo
+  ctx.fillRect(0,   cB,  c.width, c.height-cB);  // base
+  ctx.fillRect(0,   cT,  cL,      cB-cT);        // esquerda
+  ctx.fillRect(cR,  cT,  c.width-cR, cB-cT);     // direita
+
+  // Bordas de crop (linhas vermelhas)
+  const drawCrop = (x1,y1,x2,y2,hx,hy) => {
+    ctx.strokeStyle='#ff4444'; ctx.lineWidth=2.5; ctx.setLineDash([6,3]);
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#ff4444';
+    ctx.beginPath(); ctx.arc(hx,hy,9,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(hx,hy,9,0,Math.PI*2); ctx.stroke();
+  };
+  drawCrop(0,cT, c.width,cT, c.width/2, cT);           // topo
+  drawCrop(0,cB, c.width,cB, c.width/2, cB);           // base
+  drawCrop(cL,0, cL,c.height, cL, c.height/2);         // esquerda
+  drawCrop(cR,0, cR,c.height, cR, c.height/2);         // direita
+
+  // Linhas de divisão internas (douradas)
+  const drawDiv = (x) => {
+    ctx.strokeStyle='#f5c800'; ctx.lineWidth=2.5; ctx.setLineDash([7,3]);
+    ctx.beginPath(); ctx.moveTo(x,cT); ctx.lineTo(x,cB); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#f5c800';
+    ctx.beginPath(); ctx.arc(x,(cT+cB)/2,10,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(x,(cT+cB)/2,10,0,Math.PI*2); ctx.stroke();
+  };
+  drawDiv(divL); drawDiv(divR);
+
+  // Labels
+  ctx.font='bold 9px DM Mono,monospace'; ctx.textAlign='center';
+  ctx.fillStyle='rgba(255,255,255,0.9)';
+  const midY = (cT+cB)/2;
+  ctx.fillText('VERSO',   (cL+divL)/2,  midY);
+  ctx.fillText('LOMBADA', (divL+divR)/2, midY);
+  ctx.fillText('FRENTE',  (divR+cR)/2,  midY);
+}
+
+function spvAttachEvents(c){
+  const HIT = 8;
+  const hit = (x,y) => {
+    if(Math.abs(y-SPV.cT)<HIT) return 'cT';
+    if(Math.abs(y-SPV.cB)<HIT) return 'cB';
+    if(Math.abs(x-SPV.cL)<HIT) return 'cL';
+    if(Math.abs(x-SPV.cR)<HIT) return 'cR';
+    if(Math.abs(x-SPV.divL)<HIT) return 'dL';
+    if(Math.abs(x-SPV.divR)<HIT) return 'dR';
+    return null;
+  };
+  const pos = e => {
+    const r = c.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    // Escala: canvas pode ter tamanho CSS diferente do tamanho real em pixels
+    const scaleX = c.width  / r.width;
+    const scaleY = c.height / r.height;
+    return {
+      x: (src.clientX - r.left) * scaleX,
+      y: (src.clientY - r.top)  * scaleY
+    };
+  };
+  const cursors = {cT:'ns-resize',cB:'ns-resize',cL:'ew-resize',cR:'ew-resize',dL:'col-resize',dR:'col-resize'};
+
+  c.onmousedown = c.ontouchstart = e => { e.preventDefault(); const p=pos(e); SPV.drag=hit(p.x,p.y); };
+  c.onmousemove = c.ontouchmove  = e => {
+    e.preventDefault();
+    const p=pos(e);
+    if(!SPV.drag){ c.style.cursor=cursors[hit(p.x,p.y)]||'default'; return; }
+    const pad=6, W=c.width, H=c.height;
+    if(SPV.drag==='cT') SPV.cT=Math.max(0,     Math.min(SPV.cB-pad, p.y));
+    if(SPV.drag==='cB') SPV.cB=Math.max(SPV.cT+pad, Math.min(H,     p.y));
+    if(SPV.drag==='cL') SPV.cL=Math.max(0,     Math.min(SPV.divL-pad, p.x));
+    if(SPV.drag==='cR') SPV.cR=Math.max(SPV.divR+pad, Math.min(W,   p.x));
+    if(SPV.drag==='dL') SPV.divL=Math.max(SPV.cL+pad, Math.min(SPV.divR-pad, p.x));
+    if(SPV.drag==='dR') SPV.divR=Math.max(SPV.divL+pad, Math.min(SPV.cR-pad, p.x));
+    spvDraw();
+    clearTimeout(SPV.timer);
+    SPV.timer=setTimeout(spvLivePreview,150);
+  };
+  c.onmouseup=c.ontouchend=()=>{ SPV.drag=null; };
+}
+
+function spvCropParts(){
+  const iW=SPV.img.width, iH=SPV.img.height;
+  const s=SPV.scale;
+  // Converte canvas px → imagem px
+  const t =Math.round(SPV.cT /s), b=Math.round(SPV.cB /s);
+  const l =Math.round(SPV.cL /s), r=Math.round(SPV.cR /s);
+  const dL=Math.round(SPV.divL/s), dR=Math.round(SPV.divR/s);
+  const h = b-t;
+  const mkImg=(sx,sw)=>{
+    const tmp=document.createElement('canvas');
+    tmp.width=Math.max(1,sw); tmp.height=Math.max(1,h);
+    tmp.getContext('2d').drawImage(SPV.img,sx,t,sw,h,0,0,sw,h);
+    const out=new Image(); out.src=tmp.toDataURL('image/jpeg',0.95); return out;
+  };
+  return { verso:mkImg(l,dL-l), lombada:mkImg(dL,dR-dL), frente:mkImg(dR,r-dR) };
+}
+
+function spvLivePreview(){
+  const iW=SPV.img.width, iH=SPV.img.height, sc=SPV.scale;
+  const t=Math.round(SPV.cT/sc), b=Math.round(SPV.cB/sc);
+  const l=Math.round(SPV.cL/sc), r=Math.round(SPV.cR/sc);
+  const cW=r-l, cH=b-t;
+  const tmp=document.createElement('canvas');
+  tmp.width=Math.max(1,cW); tmp.height=Math.max(1,cH);
+  tmp.getContext('2d').drawImage(SPV.img,l,t,cW,cH,0,0,cW,cH);
+  const img=new Image();
+  img.onload=()=>{
+    const prevSpread=S.imgs.spread, prevMode=S.mode;
+    const prevDL=S._divL, prevDR=S._divR;
+    S.imgs.spread=img; S.mode='spread';
+    S._divL=(Math.round(SPV.divL/sc)-l)/cW;
+    S._divR=(Math.round(SPV.divR/sc)-l)/cW;
+
+    // Gera 3 ângulos: Frente Chapada, Lombada chapada, Verso Chapado
+    const previews = [
+      { fn: rFC,  label: 'Frente' },
+      { fn: rSP,  label: 'Lombada' },
+      { fn: rVC,  label: 'Verso' },
+    ];
+
+    const mg = document.getElementById('mg');
+    mg.style.display = 'grid';
+    document.getElementById('emp').style.display = 'none';
+
+    // Cria ou limpa container de preview
+    let pc = document.getElementById('spv-preview-card');
+    if(!pc){
+      pc = document.createElement('div');
+      pc.id = 'spv-preview-card';
+      pc.style.cssText = 'grid-column:1/-1;background:var(--sur);border:1px solid var(--bor);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)';
+      mg.prepend(pc);
+    }
+    pc.innerHTML = '';
+
+    // Header
+    const hdr = document.createElement('div');
+    hdr.style.cssText = 'padding:.5rem .8rem;border-bottom:1px solid var(--bor);display:flex;align-items:center;gap:.4rem';
+    hdr.innerHTML = '<span style="font-size:.75rem;color:var(--gold);font-family:DM Mono,monospace;font-weight:600">👁 Preview ao vivo</span><span style="font-size:.62rem;color:var(--tx3);font-family:DM Mono,monospace">— ajuste as linhas para atualizar</span>';
+    pc.appendChild(hdr);
+
+    // Grid com 3 previews
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;padding:.6rem';
+    pc.appendChild(grid);
+
+    previews.forEach(({fn, label}) => {
+      try {
+        const canvas = fn();
+        const col = document.createElement('div');
+        col.style.cssText = 'display:flex;flex-direction:column;gap:.25rem';
+        canvas.style.cssText = 'width:100%;border-radius:4px;display:block';
+        const lbl = document.createElement('div');
+        lbl.style.cssText = 'text-align:center;font-size:.58rem;font-family:DM Mono,monospace;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em';
+        lbl.textContent = label;
+        col.appendChild(canvas);
+        col.appendChild(lbl);
+        grid.appendChild(col);
+      } catch(e){ console.warn(label, e); }
+    });
+
+    S.imgs.spread=prevSpread; S.mode=prevMode; S._divL=prevDL; S._divR=prevDR;
+  };
+  img.src=tmp.toDataURL('image/jpeg',0.92);
+}
+
+function spvApplyToState(){
+  // Aplica crop e divisões atuais ao estado — chamado ao gerar
+  const iW=SPV.img.width, iH=SPV.img.height, s=SPV.scale;
+  const t=Math.round(SPV.cT/s), b=Math.round(SPV.cB/s);
+  const l=Math.round(SPV.cL/s), r=Math.round(SPV.cR/s);
+  const cW=r-l, cH=b-t;
+  const tmp=document.createElement('canvas');
+  tmp.width=Math.max(1,cW); tmp.height=Math.max(1,cH);
+  tmp.getContext('2d').drawImage(SPV.img, l, t, cW, cH, 0, 0, cW, cH);
+  const img=new Image();
+  img.src=tmp.toDataURL('image/jpeg',0.97);
+  S.imgs.spread=img;
+  S.mode='spread';
+  S._divL=(Math.round(SPV.divL/s)-l)/cW;
+  S._divR=(Math.round(SPV.divR/s)-l)/cW;
+}
+
+function resetSpreadAdj(){
+  if(SPV.img) spvInit(SPV.img);
+  toast('↺ Resetado');
+}
+
+// ── ILUMINAÇÃO ──────────────────────────────────────
+const LIGHT_PRESETS = {
+  suave:     { ambient: 35, main: 50,  fill: 20 },
+  neutro:    { ambient: 28, main: 62,  fill: 12 },
+  dramatico: { ambient: 15, main: 90,  fill:  6 },
+  estudio:   { ambient: 45, main: 75,  fill: 30 },
+};
+
+function updLight(){
+  const a = +document.getElementById('sl-ambient').value;
+  const m = +document.getElementById('sl-main').value;
+  const f = +document.getElementById('sl-fill').value;
+  S.light.ambient = a / 100;
+  S.light.main    = m / 100;
+  S.light.fill    = f / 100;
+  document.getElementById('lbl-ambient').textContent = a + '%';
+  document.getElementById('lbl-main').textContent    = m + '%';
+  document.getElementById('lbl-fill').textContent    = f + '%';
+}
+
+function setLightPreset(name){
+  const p = LIGHT_PRESETS[name]; if(!p) return;
+  document.getElementById('sl-ambient').value = p.ambient;
+  document.getElementById('sl-main').value    = p.main;
+  document.getElementById('sl-fill').value    = p.fill;
+  updLight();
+  toast('💡 Preset: ' + name.charAt(0).toUpperCase() + name.slice(1));
+}
+
+function confirmReset(){
+  document.getElementById('resetModal').style.display = 'flex';
+}
+function closeReset(){
+  document.getElementById('resetModal').style.display = 'none';
+}
+function doReset(){
+  closeReset();
+  // Reset state
+  S.imgs = {spread:null, frente:null, lombada:null, verso:null};
+  S.mode = 'spread';
+  S.gen  = [];
+  S._divL = null; S._divR = null;
+  SPV.img = null;
+
+  // Reset UI uploads
+  document.getElementById('dzSpread').style.borderColor = 'var(--bor2)';
+  document.getElementById('spreadFN').textContent = 'Arraste ou clique · JPG/PNG/PDF';
+  document.querySelectorAll('.mz').forEach(m=>{ m.classList.remove('ok'); m.querySelector('.ml').textContent = m.querySelector('.ml').textContent.replace('✓ OK',''); });
+
+  // Hide adjuster and mockup panel
+  document.getElementById('spread-adj').style.display = 'none';
+  document.getElementById('mg').style.display = 'none';
+  document.getElementById('mg').innerHTML = '';
+  document.getElementById('emp').style.display = 'flex';
+  document.getElementById('exp-opts').style.display = 'none';
+  document.getElementById('tinfo').textContent = '0 mockups';
+
+  // Reset file inputs
+  document.querySelectorAll('input[type=file]').forEach(i=>i.value='');
+
+  toast('✓ Pronto para uma nova capa!');
+}
+
+buildPal();
+updLight(); // init labels
+</script>
+</body>
+</html>
