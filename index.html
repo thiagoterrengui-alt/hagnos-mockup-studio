@@ -254,6 +254,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       </div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.28rem;margin-top:.2rem">
+        <button class="tb" onclick="setLightPreset('flat')">🎨 Flat</button>
         <button class="tb" onclick="setLightPreset('suave')">☁ Suave</button>
         <button class="tb" onclick="setLightPreset('neutro')">⚖ Neutro</button>
         <button class="tb" onclick="setLightPreset('dramatico')">🎭 Dramático</button>
@@ -354,6 +355,7 @@ const S = {
   spineColor:'#1a5038', spineMM:18, bg:'wht',
   angles:new Set(['fl','fr','bl','tv','fy','st','fb','fc','vc']),
   light:{ ambient:0.28, main:0.62, fill:0.12 },
+  flat: false,
   gen:[]
 };
 
@@ -599,27 +601,21 @@ function buildBookGroup(parts){
   const backTex  = parts.verso  ? srcToTex(parts.verso)  : null;
   const spineTex = parts.lombada? srcToTex(parts.lombada) : null;
 
-  const frontMat = new THREE.MeshStandardMaterial({
-    map: frontTex || null, color: frontTex ? 0xffffff : 0x2a3040,
-    roughness:0.72, metalness:0
-  });
-  const backMat = new THREE.MeshStandardMaterial({
-    map: backTex || null, color: backTex ? 0xffffff : 0x223030,
-    roughness:0.72, metalness:0
-  });
-  const spineMat = new THREE.MeshStandardMaterial({
-    map: spineTex || mkSpineTex(), color: 0xffffff,
-    roughness:0.75, metalness:0
-  });
-  // Pintura lateral: MeshBasicMaterial ignora luz 100% — cor exata sempre
-  const mkPaintMat = (tex) => S.sp==='paint'
+  // Flat mode: MeshBasicMaterial ignora luz — cor original 100% fiel
+  const CoverMat = S.flat ? THREE.MeshBasicMaterial : THREE.MeshStandardMaterial;
+  const cOpts    = S.flat ? {} : { roughness:0.72, metalness:0 };
+  const frontMat = new CoverMat({ map: frontTex || null, color: frontTex ? 0xffffff : 0x2a3040, ...cOpts });
+  const backMat  = new CoverMat({ map: backTex  || null, color: backTex  ? 0xffffff : 0x223030, ...cOpts });
+  const spineMat = new CoverMat({ map: spineTex || mkSpineTex(), color: 0xffffff, ...cOpts });
+  // Flat ou pintura: MeshBasicMaterial ignora luz 100%
+  const mkEdgeMat = (tex) => (S.sp==='paint' || S.flat)
     ? new THREE.MeshBasicMaterial({ map: tex, color: 0xffffff })
     : new THREE.MeshStandardMaterial({ map: tex, color: 0xffffff, roughness: 0.88, metalness: 0 });
 
-  const foreedgeMat = mkPaintMat(mkForeedgeTex());
-  const topEdgeMat  = mkPaintMat(mkTopEdgeTex());
+  const foreedgeMat = mkEdgeMat(mkForeedgeTex());
+  const topEdgeMat  = mkEdgeMat(mkTopEdgeTex());
   // pageEdgeMat: for page block top/bottom in hardcover
-  const pageEdgeMat = isHard ? mkPaintMat(mkPageOnlyEdgeTex()) : topEdgeMat;
+  const pageEdgeMat = isHard ? mkEdgeMat(mkPageOnlyEdgeTex()) : topEdgeMat;
 
   if(!isHard){
     // ── BROCHURA: single box ──
@@ -1685,6 +1681,7 @@ function resetSpreadAdj(){
 
 // ── ILUMINAÇÃO ──────────────────────────────────────
 const LIGHT_PRESETS = {
+  flat:      { ambient:  0, main:  0,  fill:  0 },
   suave:     { ambient: 35, main: 50,  fill: 20 },
   neutro:    { ambient: 28, main: 62,  fill: 12 },
   dramatico: { ambient: 15, main: 90,  fill:  6 },
@@ -1698,9 +1695,13 @@ function updLight(){
   S.light.ambient = a / 100;
   S.light.main    = m / 100;
   S.light.fill    = f / 100;
-  document.getElementById('lbl-ambient').textContent = a + '%';
+  const flatLabel = S.flat ? ' (Flat)' : '';
+  document.getElementById('lbl-ambient').textContent = a + '%' + flatLabel;
   document.getElementById('lbl-main').textContent    = m + '%';
   document.getElementById('lbl-fill').textContent    = f + '%';
+  // Opacidade dos sliders: mais apagados no modo flat
+  const op = S.flat ? '0.35' : '1';
+  ['sl-ambient','sl-main','sl-fill'].forEach(id => document.getElementById(id).style.opacity = op);
 }
 
 function setLightPreset(name){
@@ -1708,8 +1709,10 @@ function setLightPreset(name){
   document.getElementById('sl-ambient').value = p.ambient;
   document.getElementById('sl-main').value    = p.main;
   document.getElementById('sl-fill').value    = p.fill;
+  S.flat = (name === 'flat');
   updLight();
-  toast('💡 Preset: ' + name.charAt(0).toUpperCase() + name.slice(1));
+  const labels = {flat:'🎨 Flat — cor original', suave:'☁ Suave', neutro:'⚖ Neutro', dramatico:'🎭 Dramático', estudio:'💡 Estúdio'};
+  toast(labels[name] || name);
 }
 
 function confirmReset(){
